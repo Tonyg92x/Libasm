@@ -1,0 +1,29 @@
+Arguments
+---------------
+
+rdi:	1
+rsi:	2
+rdx:	3
+rcx:	4
+r8:		5
+r9:		6
+
+
+General Purpose Registers - Avant stack
+---------------
+rax:	(Ret) 					Fonction return and primary accumulator. (arithmetic)
+rbx:	(Base) 					Various usage, like storing base addresses												
+rcx:	(Counter) 				Loop counter (it) and certain string / mem operations
+rdx:	(Data)					Second registry used for certain arithmetic (involving large numbers)
+rsi:	(Source Index)			Often use as index in string operations and memory copying.
+rdi:	(Destination Index)		Typically use as destination indexin string operations and memory copying. Also Arg 1.
+
+Stack
+--------------
+rbp:	Base Pointer
+rsp:	Stack Pointer
+
+
+Instruction Pointer
+---------------
+Instruction Pointer:rip
