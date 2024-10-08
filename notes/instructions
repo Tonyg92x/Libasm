@@ -1,0 +1,273 @@
+Data Movement Instructions
+---------------
+These instructions move data between registers, memory, and immediate values.
+
+mov:		Move data from one location to another.
+			mov rax, rbx      ; Copy contents of RBX into RAX
+			mov rax, 1234     ; Move immediate value 1234 into RAX
+			mov [rbx], rax    ; Store the contents of RAX into memory at address in RBX
+
+movsx / movzx:	Move with sign extension (sx) or zero extension (zx).
+			movsx rax, ebx    ; Move with sign extension from EBX to RAX
+			movzx rax, bx     ; Move with zero extension from BX to RAX
+
+push / pop:	Push data onto the stack / Pop data off the stack.
+			push rax          ; Push RAX onto the stack
+			pop rbx           ; Pop top of stack into RBX
+
+lea:		Load effective address (used to calculate addresses).
+			lea rax, [rbx + 4]  ; Load address RBX + 4 into RAX
+
+Arithmetic Instructions
+--------------
+These instructions perform arithmetic operations like addition, subtraction, multiplication, and division.
+
+add / sub:	Addition and subtraction.
+			add rax, rbx     ; RAX = RAX + RBX
+			sub rax, rbx     ; RAX = RAX - RBX
+
+inc / dec:	Increment and decrement by 1.
+			inc rax          ; Increment RAX by 1
+			dec rax          ; Decrement RAX by 1
+
+mul:		Unsigned multiplication.
+			mul rbx          ; Unsigned multiply RAX by RBX, result in RDX:RAX
+
+imul:		Signed multiplication. Similar to mul, but works with signed numbers.
+			imul rbx         ; Signed multiply RAX by RBX, result in RDX:RAX
+			imul rax, rbx, 5 ; RAX = RBX * 5 (signed)
+
+div:		Unsigned division.
+			div rbx          ; Divide RDX:RAX by RBX, quotient in RAX, remainder in RDX
+
+idiv:		Signed division.
+			idiv rbx         ; Signed divide RDX:RAX by RBX, quotient in RAX, remainder in RDX
+
+Logic Instructions
+---------------
+These instructions perform bitwise logical operations like AND, OR, XOR, and NOT.
+
+and:		Bitwise AND.
+			and rax, rbx     ; RAX = RAX & RBX
+
+or:		Bitwise OR
+			or rax, rbx      ; RAX = RAX | RBX
+
+xor:		Bitwise XOR (often used to zero a register by XORing it with itself).
+			xor rax, rax     ; RAX = 0
+
+not:		Bitwise NOT (complement).
+			not rax          ; RAX = ~RAX (bitwise negation)
+
+shl / shr:	Logical shift left / right.
+			shl rax, 1       ; Shift RAX left by 1 bit (multiplying by 2)
+			shr rax, 2       ; Shift RAX right by 2 bits (dividing by 4)
+
+Control Flow Instructions
+---------------
+These instructions control the flow of execution, including jumps, function calls, and condition handling.
+
+jmp:		Unconditional jump to a specified label or address.
+			jmp label        ; Jump to label
+
+je / jne:	Jump if equal / not equal (based in the zero flag).
+			je label       ; Jump if equal (ZF is set)
+			jne label      ; Jump if not equal (ZF is not set)
+
+jg / jl:	Jump if greater / less than (signed comparison).
+			jg label       ; Jump if greater (signed)
+			jl label       ; Jump if less (signed)
+
+ja / jb:	Jump if above / velow (unsigned comparison).
+			ja label       ; Jump if above (unsigned)
+			jb label       ; Jump if below (unsigned)
+
+cmp:		Compare two values (sets flags based on the result).
+			cmp rax, rbx     ; Compare RAX with RBX
+
+call / ret:	Call a function and return from a function.
+			call func        ; Call the function at address 'func'
+			ret              ; Return from the current function
+
+leave:		Clean up the stack frame before returning from a function (used with enter).
+			leave            ; Clean up stack frame
+
+
+loop:		Loop a certain number of times (uses RCX as a counter).
+			loop label       ; Decrement RCX, jump to label if RCX > 0
+
+
+Comparison and Test instructions
+---------------
+These instructions test conditions and set flags, which are used by conditional jumps.
+
+cmp:		Compare two values (substracts them and sets flags accordingly, but does not store the result).
+			cmp rax, rbx     ; Compare RAX with RBX
+
+test:		Bitwise AND comparison of two values, used to test specific bits.
+			test rax, rax    ; Test if RAX is zero (sets ZF if zero)
+
+Stack Instructions
+---------------
+These instructions interact with the call stack.
+
+push / pop:	Push a value onto the stack / Pop a value from the stack.
+			push rax         ; Push RAX onto the stack
+			pop rbx          ; Pop the value at the top of the stack into RBX
+
+enter / leave:	Set up and tear down a stack frames for function calls.
+			enter 16, 0      ; Set up a stack frame with 16 bytes of local space
+			leave            ; Clean up the stack frame (restore base pointer)
+
+System Instructions
+--------------
+These are special-purpose instructions for interacting with the system or managing processor state.
+
+int:		Software interrupt, often used for system calls.
+			int 0x80         ; Linux system call interrupt (32-bit mode)
+			syscall          ; 64-bit system call instruction
+
+hlt:		Halt the processor (used to stop execution until an interrupt occurs).
+			hlt              ; Halt the processor
+
+Flags and Status Instructions
+---------------
+These instructions operate on the processor’s flags (status flags like zero, carry, sign, overflow).
+
+clc:		Clear carry flag.
+			clc              ; Clear carry flag (CF = 0)
+
+stc:		Set carry flag.
+			stc              ; Set carry flag (CF = 1)
+
+cld:		Clear direction flag (used for string operations).
+			cld              ; Clear direction flag (DF = 0)
+
+std:		Set the direction flag (used for string operations).
+			std              ; Set direction flag (DF = 1)
+
+lahf / sahf:	Load and store flags into AH register (used to save/restore flags).
+			lahf             ; Load flags into AH register
+			sahf             ; Store AH into flags register
+
+String Operations
+---------------
+In x86-64 assembly, string operations work by using specific registers, mainly RSI (source index), RDI (destination index), and sometimes RCX (counter for the number of elements). These instructions allow you to move, compare, and manipulate strings efficiently.
+
+movsb:		Move string of bytes
+			; Move a single byte from [RSI] to [RDI]
+			mov rsi, src            ; Load source address into RSI
+			mov rdi, dest           ; Load destination address into RDI
+			movsb                   ; Move byte from [RSI] to [RDI], RSI and RDI incremented
+
+movsw:		Move string of word (2 bytes)
+			; Move a 2-byte word from [RSI] to [RDI]
+			mov rsi, src            ; Load source address into RSI
+			mov rdi, dest           ; Load destination address into RDI
+			movsw                   ; Move word (2 bytes) from [RSI] to [RDI]
+
+movsd:		Move string of double-word (4 bytes)
+			; Move a 4-byte double word from [RSI] to [RDI]
+			mov rsi, src            ; Load source address into RSI
+			mov rdi, dest           ; Load destination address into RDI
+			movsd                   ; Move double-word (4 bytes) from [RSI] to [RDI]
+
+movsq:		Move quad-word (8 bytes)
+			; Move an 8-byte quad word from [RSI] to [RDI]
+			mov rsi, src            ; Load source address into RSI
+			mov rdi, dest           ; Load destination address into RDI
+			movsq                   ; Move quad-word (8 bytes) from [RSI] to [RDI]
+
+These instructions compare the data at [RSI] and [RDI]. They work by subtracting the value at [RDI] from [RSI], setting flags based on the result.
+
+cmpsb:		Compare byte at [RSI] with byte at [RDI]
+			; Compare single byte from [RSI] and [RDI]
+			mov rsi, str1           ; Load address of first string into RSI
+			mov rdi, str2           ; Load address of second string into RDI
+			cmpsb                   ; Compare byte at [RSI] with byte at [RDI]
+                        ; Sets flags like ZF, SF, etc.
+
+cmpsw		Compare word (2 bytes)
+			; Compare word from [RSI] and [RDI]
+			mov rsi, str1           ; Load address of first string into RSI
+			mov rdi, str2           ; Load address of second string into RDI
+			cmpsw                   ; Compare word (2 bytes) from [RSI] with [RDI]
+
+cmpsd:		Compare double-word (4 bytes)
+			; Compare double word from [RSI] and [RDI]
+			mov rsi, str1           ; Load address of first string into RSI
+			mov rdi, str2           ; Load address of second string into RDI
+			cmpsd                   ; Compare double-word (4 bytes) from [RSI] with [RDI]
+
+cmpsq: 		Compare quad-word (8 bytes)
+			; Compare quad-word from [RSI] and [RDI]
+			mov rsi, str1           ; Load address of first string into RSI
+			mov rdi, str2           ; Load address of second string into RDI
+			cmpsq                   ; Compare quad-word (8 bytes) from [RSI] with [RDI]
+
+These instructions store the value in AL, AX, EAX, or RAX into the memory location pointed to by RDI.
+
+stosb:		Store byte in AL at [RDI]
+			; Store a single byte (in AL) at destination [RDI]
+			mov rdi, dest           ; Load destination address into RDI
+			mov al, 0x41            ; Load the byte value (ASCII 'A') into AL
+			stosb                   ; Store AL into [RDI], then increment RDI
+
+stosw:		Store word (2 bytes)
+			; Store a word (in AX) at destination [RDI]
+			mov rdi, dest           ; Load destination address into RDI
+			mov ax, 0x1234          ; Load 2-byte word into AX
+			stosw                   ; Store AX into [RDI], then increment RDI
+
+stosd:		Store double-word (4 bytes)
+			; Store a double word (in EAX) at destination [RDI]
+			mov rdi, dest           ; Load destination address into RDI
+			mov eax, 0x12345678     ; Load 4-byte value into EAX
+			stosd                   ; Store EAX into [RDI], then increment RDI
+stosq:		Store quad-word (8 bytes)
+			; Store a quad word (in RAX) at destination [RDI]
+			mov rdi, dest           ; Load destination address into RDI
+			mov rax, 0x1234567890ABCDEF ; Load 8-byte value into RAX
+			stosq                   ; Store RAX into [RDI], then increment RDI
+
+These instructions load data from the memory location at [RSI] into AL, AX, EAX, or RAX.
+
+lodsb:		Load byte from [RSI] into AL
+			; Load byte from [RSI] into AL
+			mov rsi, src            ; Load source address into RSI
+			lodsb                   ; Load byte at [RSI] into AL, increment RSI
+
+lodsw:		Load word (2 bytes)
+			; Load word from [RSI] into AX
+			mov rsi, src            ; Load source address into RSI
+			lodsw                   ; Load word (2 bytes) from [RSI] into AX
+
+lodsd: 		Load double-word (4 bytes)
+			; Load double-word from [RSI] into EAX
+			mov rsi, src            ; Load source address into RSI
+			lodsd                   ; Load double-word (4 bytes) from [RSI] into EAX
+
+lodsq:		Load quad-word (8 bytes)
+			; Load quad-word from [RSI] into RAX
+			mov rsi, src            ; Load source address into RSI
+			lodsq                   ; Load quad-word (8 bytes) from [RSI] into RAX
+
+These instructions compare the value in AL, AX, EAX, or RAX with the memory location at [RDI]. Useful for searching.
+
+scasb: 		Compare AL with byte at [RDI]
+			; Compare AL with byte at [RDI]
+			mov rdi, str            ; Load address of string into RDI
+			mov al, 0x41            ; Load the byte value (ASCII 'A') into AL
+			scasb                   ; Compare AL with byte at [RDI]
+
+scasw: 		Compare word (2 bytes)
+			; Compare AX with word at [RDI]
+			mov rdi, str            ; Load address of string into RDI
+			mov ax, 0x1234          ; Load the 2-byte value into AX
+			scasw                   ; Compare AX with word at [RDI]
+
+scasd: 		Compare double-word (4 bytes)
+			; Compare EAX with double-word at [RDI]
+			mov rdi, str            ;
+
+

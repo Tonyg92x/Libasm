@@ -1,0 +1,85 @@
+Arguments
+---------------
+rdi:		1
+rsi:		2
+rdx:		3
+rcx:		4
+r8:		5
+r9:		6
+
+
+General Purpose Registers - Avant stack
+---------------
+rax:	(Ret) 					Fonction return and primary accumulator. (arithmetic)
+rbx:	(Base) 					Various usage, like storing base addresses
+rcx:	(Counter) 				Loop counter (it) and certain string / mem operations
+rdx:	(Data)					Second registry used for certain arithmetic (involving large numbers)
+rsi:	(Source Index)				Often use as index in string operations and memory copying.
+rdi:	(Destination Index)			Typically use as destination indexin string operations and memory copying. Also Arg 1.
+r8-r15: (Additionnal general-purpose registers) 
+
+
+Stack
+--------------
+rbp:	Base Pointer
+rsp:	Stack Pointer
+
+
+Segment Registers
+--------------
+In the x86 architecture, the memory address space is divided into segments, and each segment is associated with a segment register that holds the base address (starting point) of that segment. A logical address is composed of two parts: a segment selector (stored in a segment register) and an offset within the segment.
+
+When the CPU accesses memory, it uses these two components:
+
+Segment selector (segment register) to determine which memory segment to use.
+Offset to specify the location within that segment.
+The CPU adds the segment's base address (from the segment register) to the offset to produce the linear address, which is then mapped to a physical address (if paging is enabled).
+
+cs:	(Code segment register)			Points to the segment that contains the current program's executable code.
+ds:	(Data segment register)			Points to the segment that contains the data used by the program.
+ss:	(Stack segment register)		Points to the segment that contains the stack for the current program.
+es:	(Additional segment register)		Additional segment registers that can be used for various purposes, such as pointing to thread-local storage.
+fs:	(Additional segment register)		Additional segment registers that can be used for various purposes, such as pointing to thread-local storage.
+gs:	(Additional segment register)		Additional segment registers that can be used for various purposes, such as pointing to thread-local storage.
+
+
+Instruction Pointer
+---------------
+rip:	(Instruction Pointer)			Point to the next instruction to be executed.
+
+
+Flags - RGLAGS - various CPU flags
+---------------
+zf:	(Zero Flag)				Set if the result of an operation is zero, used in conditional jumps.
+sf:	(Sign Flag)				Set if the result is negative.
+cf:	(Carry Flag)				Set if there was a carry out from the msot significant bit during an arithmetic operation. Indicates overflow in unsigned arithmetic.
+of:	(Overflow Flag)				Set if there was a signed overflow in the result of an operation.
+pf:	(Parity Flag)				Set if the number of set bits in the result is even.
+af:	(Auxilary Carry Flag)			Used in binary-coded decumal (BCD) arithmetic.
+df:	(Direction Flag)			Determines the direction of string operations (increment or decrement).
+if:	(Interrupt Enable Flag)			When set, allows hardware interrupts. When cleared, disables interrupts.
+
+
+Control Registers
+--------------
+Control registers are special-purpose registers used to control various aspects of CPU operation, especially in the context of memory management, protected mode, and virtual memory. In x86-64 architecture, the most commonly used control registers include:
+
+cr0:	(Control register for system control)	Contains flags that control the operation of the processor, such as enabling/disabling paging and protected mode.
+cr1:	(Control register for system control)
+cr2:	(Control register for system control)	Contains the linear address that caused a page fault. Used in memory management to diagnose issues with memory access.
+cr3:	(Control register for system control)	Holds the physical address of the page table used for virtual memory translation. It is crucial for paging and virtual memory management.
+cr4:	(Control register for system control)	Contains additional flags to enable/disable various features such as extended page tables (EPT), physical address extension (PAE), and more.
+
+
+Debug Registers
+-------------
+dr0:	(Debug register)			These registers are used to store breakpoints (addresses) for debugging. When the CPU accesses memory at these addresses, it triggers a debug exception.
+dr1:	(Debug register)			These registers are used to store breakpoints (addresses) for debugging. When the CPU accesses memory at these addresses, it triggers a debug exception.
+dr2:	(Debug register)			These registers are used to store breakpoints (addresses) for debugging. When the CPU accesses memory at these addresses, it triggers a debug exception.
+dr3:	(Debug register)			These registers are used to store breakpoints (addresses) for debugging. When the CPU accesses memory at these addresses, it triggers a debug exception.
+dr4:	(Debug register)			
+dr5:	(Debug register)
+dr6:	(Debug register)			This register holds the status of the debug conditions. It indicates which debug event occurred, such as a breakpoint hit or a single step event.
+dr7:	(Debug register)			This register controls the behavior of the debug registers. It enables/disables the breakpoints set in DR0-DR3 and specifies the conditions under which breakpoints should trigger.
+dr8:	(Debug register)
+
