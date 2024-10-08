@@ -64,7 +64,7 @@ $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.s
 all: $(OBJ_DIR) $(NAME)
 
 build: all
-	clang -L. -lasm -g $(SRCS_DIR)/main.c -I $(INCLUDE_DIR) -o $(TEST_NAME) 
+	$(CC) -g $(SRCS_DIR)/main.c -I $(INCLUDE_DIR) -L. -lasm -o $(TEST_NAME) 
 
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
@@ -81,6 +81,6 @@ clean:
 fclean: clean
 	@rm -f $(NAME) $(TEST_NAME)
 
-re: fclean all
+re: fclean all build
 
 .PHONY: all clean fclean re
