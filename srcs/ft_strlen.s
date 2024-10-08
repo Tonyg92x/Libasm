@@ -1,5 +1,5 @@
-global _ft_strlen
+global ft_strlen
 
-_ft_strlen:
+ft_strlen:
 	mov rax, 123
 	ret

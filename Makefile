@@ -4,6 +4,7 @@
 
 ## -----  NAME OF THE PROGRAMM ----- ##
 NAME 			= libasm.a 
+TEST_NAME		= libasm_test.elf
 
 ## ----- CHOOSE COMPILER AND FLAGS ----- ##
 ifeq ($(shell uname -s), Linux)
@@ -14,14 +15,22 @@ else
     $(error Unsupported OS: $(shell uname -s))
 endif
 
+CC			= gcc
+CFLAGS			= -Wall -Wextra -Werror
+
 ## ----- PATH TO FOLDERS ----- ##
 SRCS_DIR		= srcs
-
 OBJ_DIR			= obj
+INCLUDE_DIR		= includes/
 
 ## ----- SOURCE FILES ----- ##
 SRCS_FILES		= 					\
-			ft_strlen.s			
+			ft_read.s				\
+			ft_strcmp.s				\
+			ft_strcpy.s				\
+			ft_strdup.s				\
+			ft_strlen.s				\
+			ft_write.s
 
 ## ----- .C TO .O CONVERT ----- ##
 OBJ_FILES		= $(SRCS_FILES:.s=.o)
@@ -34,7 +43,7 @@ VPATH			= $(SRCS_DIR)
 #--------------------------------------------------------------#
 
 ## ----- TOOLS AND COLORS ----- ##
-RM				= rm -Rf
+RM			= rm -Rf
 NO_PRINT		= --no-print-directory
 RED 			= \033[31m
 GREEN 			= \033[32m
@@ -48,17 +57,20 @@ NORMAL 			= \033[0m
 
 
 $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.s
-	nasm $(FLAGS) -g -F dwarf -i /usr/include $< -o $@
+	nasm $(FLAGS) -g -F dwarf -I $(INCLUDE_DIR) -i /usr/include $< -o $@
 
 #	-i  /user/include
 
 all: $(OBJ_DIR) $(NAME)
 
+build: all
+	clang -L. -lasm -g $(SRCS_DIR)/main.c -I $(INCLUDE_DIR) -o $(TEST_NAME) 
+
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
 $(OBJ_DIR):
-	@echo "$(RED) Making TonyG ASM 64 library $(AQUA)"
+	@echo "Making TonyG ASM 64 library"
 	@mkdir -p $(OBJ_DIR)
 
 ## ----- CLEAN COMMANDS ----- ##
@@ -67,7 +79,7 @@ clean:
 	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(TEST_NAME)
 
 re: fclean all
 
